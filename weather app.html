@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>WEATHER APP</title>
+    <style type="text/css">
+        body{
+            background: black;
+        }
+
+        .container{
+            border: 10px solid white;
+            border-radius: 120px;
+            width: 200px;
+            height: 200px;
+            margin-top: 100px;
+            margin-left: 700px;
+            background-color: #FC46AA;
+        }
+        .border{
+            border: 10px solid white;
+            border-radius: 120px;
+            width: 200px;
+            height: 200px;
+            margin-top: 200px;
+            margin-left: -450px;
+            background-color: #FA8607;
+        }
+
+        .weather{
+            color: #fff;
+            border: 10px solid white;
+            border-radius: 50px;
+            width: 400px;
+            height: 450px;
+            margin-top: -400px;
+            margin-left: -300px;
+            background: rgba(232, 0, 255, 0.11);
+            backdrop-filter: blur(40px); 
+        }
+        .icon{
+            font-size: 30px;
+            margin-top: -55px;
+            margin-left: 20px;
+        }
+        #inputcity{
+            margin-top: 30px;
+            margin-left: 30px;
+            width: 200px;
+            height: 30px;
+            border-radius: 10px;
+        }
+        #search{
+            color: #fff;
+            width: 100px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: skyblue;
+            cursor: pointer;
+        }
+        .weatherdata{
+            margin-left: 100px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="border"></div>
+        <div class="weather">
+            <h1 style="margin-left: 80px;">WEATHER APP</h1>
+            <div class="icon">
+                <i class="fa-solid fa-cloud"></i>
+            </div>
+            <input type="text" id="inputcity" placeholder="Enter Your City...">
+            <button id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="weatherdata"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const apikey = "4624630c30425b5f25b59ecf8eedb100";
+        const searchbtn = document.getElementById('search');
+        const weatherdata = document.querySelector('.weatherdata'); 
+
+
+
+
+        searchbtn.addEventListener('click', async () => {
+            const inputcity = document.getElementById('inputcity').value;
+            if (inputcity) {
+                
+                await getWeatherData(inputcity); 
+            }
+        });
+
+        async function getWeatherData(city) {
+            try {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}&units=metric`); 
+                const data = await response.json();
+                displayWeather(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        function displayWeather(data) {
+            const { name, main, weather } = data;
+            const temperature = main.temp;
+            const description = weather[0].description;
+
+            const weatherHtml = `
+                <h2>Weather in ${name}</h2>
+                <p>Temperature: ${temperature}°C</p>
+                <p>Description: ${description}</p>
+            `;
+
+            weatherdata.innerHTML = weatherHtml;
+        }
+    </script>
+</body>
+</html>
